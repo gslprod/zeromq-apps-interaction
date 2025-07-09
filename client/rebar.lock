@@ -1,0 +1,8 @@
+{"1.2.0",
+[{<<"chumak">>,{pkg,<<"chumak">>,<<"1.5.0">>},0}]}.
+[
+{pkg_hash,[
+ {<<"chumak">>, <<"8FA5AAE063178F9914EDF6FEB5C3EEFF5CDCF33A1C6B55EFFE917FFFF2B1650B">>}]},
+{pkg_hash_ext,[
+ {<<"chumak">>, <<"EA8C767DD9C72046126003FA1141A934C33AF478AD2BFB4F06EBC67AE6A21EB8">>}]}
+].
