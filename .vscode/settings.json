@@ -2,6 +2,7 @@
     "files.associations": {
         "zmq.h": "c",
         "time.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "assert.h": "c"
     }
 }

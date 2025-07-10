@@ -1,16 +1,20 @@
 -module(time_client).
 -export([main/0]).
 
--define(ADDRESS, "/tmp/time_server").
--define(PROTOCOL, ipc). %todo - ipc is not supported (tcp only)
+-define(ADDRESS, "localhost").
+-define(PROTOCOL, tcp).
+-define(PORT, 5555).
 
 main() ->
+    %% creating and setting up SUB socket
     application:start(chumak),
     {ok, Socket} = chumak:socket(sub),
     chumak:subscribe(Socket, <<"">>),
 
-    case chumak:connect(Socket, ?PROTOCOL, ?ADDRESS, 0) of
-        ok ->
+    %% connecting to publisher
+    %% start a main loop if successful
+    case chumak:connect(Socket, ?PROTOCOL, ?ADDRESS, ?PORT) of
+        {ok, _BindPid} ->
             io:format("Connected successfully"),
             loop(Socket);
         {error, Reason} ->
@@ -19,13 +23,12 @@ main() ->
             io:format("Unhandled reply for connection: ~p~n", [X])
     end.
 
+%% main loop - receiving and printing data
 loop(Socket) ->
     case chumak:recv(Socket) of
         {ok, TimeData} ->
             io:format("Time received: ~p~n", [TimeData]),
             loop(Socket);
         {error, Reason} ->
-            io:format("Receive error: ~p~n", [Reason]);
-        X ->
-            io:format("Unhandled content received: ~p~n", [X])
+            io:format("Receive error: ~p~n", [Reason])
     end.
