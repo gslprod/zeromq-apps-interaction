@@ -9,17 +9,31 @@
 volatile sig_atomic_t stop_flag = 0;
 
 //ctrl+c signal handler - activating stop flag
-void sigint_handling(int signum) {
+void sigint_handling(int signum)
+{
     stop_flag = 1;
 }
 
-int main()
+//cleaning up
+void destroy_socket_and_context(void *socket, void *context)
+{
+    zmq_close(socket);
+    zmq_ctx_destroy(context);
+}
+
+int main(void)
 {
     //creating and setting up PUB socket
     void *context = zmq_ctx_new();
     void *publisher = zmq_socket(context, ZMQ_PUB);
-    int code = zmq_bind(publisher, FULL_ADDRESS);
-    assert(code == 0 && "Connection error");
+    //clean up and exit if connection error
+    if (zmq_bind(publisher, FULL_ADDRESS) != 0)
+    {
+        destroy_socket_and_context(publisher, context);
+
+        printf("Connection error. Exiting\n");
+        return 1;
+    }
 
     //assignment of ctrl+c signal handler
     signal(SIGINT, sigint_handling);
@@ -34,7 +48,7 @@ int main()
     while (strcmp(cmd, "send") != 0);
     printf("Server started. Press Ctrl+C to stop\n");
 
-    //main loop - stopping when stop flag is activated
+    //main loop - exit when stop flag is activated
     int prev_secs = -1;
     while (!stop_flag) {
         time_t total_seconds;
@@ -59,9 +73,7 @@ int main()
         prev_secs = secs;
     }
 
-    //cleaning up
-    zmq_close(publisher);
-    zmq_ctx_destroy(context);
+    destroy_socket_and_context(publisher, context);
 
     printf("\nServer stopped\n");
     return 0;
