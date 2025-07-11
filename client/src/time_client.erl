@@ -15,7 +15,7 @@ main() ->
     %% start a main loop if successful
     case chumak:connect(Socket, ?PROTOCOL, ?ADDRESS, ?PORT) of
         {ok, _BindPid} ->
-            io:format("Connected successfully"),
+            io:format("Connected successfully~n"),
             loop(Socket);
         {error, Reason} ->
             io:format("Connection failed for this reason: ~p~n", [Reason]);

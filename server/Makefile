@@ -17,8 +17,8 @@ $(OUT): $(SRC)
 	$(CC) $(CFLAGS) -o $(OUT) $(SRC) $(LDFLAGS)
 
 run:
-	$(OUT)
+	./$(OUT)
 
 clean:
 	rm -f $(OUT)
-	cd $(ZEROMQ) && make clean
+	cd $(ZEROMQ) && make distclean
