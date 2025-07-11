@@ -4,5 +4,6 @@
         "time.h": "c",
         "string.h": "c",
         "assert.h": "c"
-    }
+    },
+    "makefile.configureOnOpen": false
 }
