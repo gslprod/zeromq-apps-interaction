@@ -13,7 +13,7 @@ all: build
 build: $(OUT)
 
 $(OUT): $(SRC)
-	cd $(ZEROMQ) && ./configure --without-libsodium --disable-shared --enable-static && make
+	cd $(ZEROMQ) && make
 	$(CC) $(CFLAGS) -o $(OUT) $(SRC) $(LDFLAGS)
 
 run:
@@ -21,4 +21,4 @@ run:
 
 clean:
 	rm -f $(OUT)
-	cd $(ZEROMQ) && make distclean
+	cd $(ZEROMQ) && make clean
