@@ -125,5 +125,4 @@ Connected successfully
 Time received: 16:38:53
 Time received: 16:39:19
 Time received: 16:39:30
-...
 ```
