@@ -1,8 +1,8 @@
 -module(time_client).
 -export([main/0]).
 
--define(ADDRESS, "localhost").
 -define(PROTOCOL, tcp).
+-define(ADDRESS, "localhost").
 -define(PORT, 5555).
 
 main() ->
@@ -27,7 +27,7 @@ main() ->
 loop(Socket) ->
     case chumak:recv(Socket) of
         {ok, TimeData} ->
-            io:format("Time received: ~p~n", [TimeData]),
+            io:format("Time received: ~s~n", [TimeData]),
             loop(Socket);
         {error, Reason} ->
             io:format("Receive error: ~p~n", [Reason])

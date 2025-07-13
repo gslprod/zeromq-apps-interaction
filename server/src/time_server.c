@@ -2,19 +2,11 @@
 #include <time.h>
 #include <string.h>
 #include <assert.h>
-#include <signal.h>
+#include <stdio.h>
 
 #define FULL_ADDRESS "tcp://*:5555"
 
-volatile sig_atomic_t stop_flag = 0;
-
-//ctrl+c signal handler - activating stop flag
-void sigint_handling(int signum)
-{
-    stop_flag = 1;
-}
-
-//cleaning up
+//cleaning up function
 void destroy_socket_and_context(void *socket, void *context)
 {
     zmq_close(socket);
@@ -35,25 +27,27 @@ int main(void)
         return 1;
     }
 
-    //assignment of ctrl+c signal handler
-    signal(SIGINT, sigint_handling);
-
-    //waiting for "send" command from user
-    char cmd[10];
-    do
+    //main loop
+    while (1)
     {
-        printf("Type send to start\n");
-        scanf("%9s", cmd);
-    }
-    while (strcmp(cmd, "send") != 0);
-    printf("Server started. Press Ctrl+C to stop\n");
+        printf("Type 'send' to send message, 'exit' to quit program\n");
 
-    //main loop - exit when stop flag is activated
-    int prev_secs = -1;
-    while (!stop_flag) {
+        char cmd[30];
+        scanf("%29s", cmd);
+
+        //waiting for command from user
+        if (strcmp(cmd, "exit") == 0)
+            break;
+        else if (strcmp(cmd, "send") != 0)
+        {
+            printf("Unknown command\n");
+            continue;
+        }
+
         time_t total_seconds;
         struct tm *timeinfo;
         
+        //getting time
         time(&total_seconds);
         timeinfo = localtime(&total_seconds);
 
@@ -62,19 +56,17 @@ int main(void)
         mins = timeinfo->tm_min;
         secs = timeinfo->tm_sec;
         
-        //send data only when seconds changed
-        if (prev_secs == secs)
-            continue;
-        
+        //sending message with time
         char message[9];
         sprintf(message, "%02d:%02d:%02d", hours, mins, secs);
         zmq_send(publisher, message, strlen(message), 0);
-        
-        prev_secs = secs;
+
+        printf("Message sent: %s\n", message);
     }
 
+    //cleaning up and exiting
     destroy_socket_and_context(publisher, context);
 
-    printf("\nServer stopped\n");
+    printf("\nExiting\n");
     return 0;
 }
