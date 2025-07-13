@@ -30,7 +30,7 @@
 
 * Erlang/OTP 26-28;
 
-* GCC;
+* GCC + libstdc++;
 
 * make.
 
