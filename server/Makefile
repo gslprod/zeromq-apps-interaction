@@ -15,7 +15,7 @@ build: $(OUT)
 $(OUT): $(SRC)
 	$(CC) $(CFLAGS) -o $(OUT) $(SRC) $(LDFLAGS)
 
-run:
+run: build
 	./$(OUT)
 
 clean:

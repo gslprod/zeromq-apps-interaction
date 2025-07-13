@@ -8,7 +8,7 @@ build:
 	$(REBAR) get-deps
 	$(REBAR) compile
 
-run:
+run: build
 	$(REBAR) shell
 
 clean:
