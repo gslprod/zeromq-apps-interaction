@@ -4,13 +4,14 @@
 
 Данный проект демонстрирует взаимодействие между двумя приложениями:
 
-1. **Сервер на C** — принимает команду `send` из консоли и начинает отправлять сообщения с текущим временем;
+1. **Сервер на C** — принимает команду `send` из консоли и отправляет сообщение с текущим временем;
 
 2. **Клиент на Erlang** — получает и выводит полученные сообщения в консоль.
 
 Обмен сообщениями осуществляется по **протоколу TCP**.
 
 ## Состав проекта
+
 * `server/` — директория сервера. Включает:
 
     * `server/src/` — исходный код сервера,
@@ -43,7 +44,8 @@
 
 ## Скачивание и сборка
 
-В качестве примера для скачивания репозитория используется `git`. Перед его использованием убедитесь, что он установлен на Вашей системе.
+В качестве примера для скачивания репозитория используется `git`.
+
 ```
 $ git clone https://github.com/gslprod/zeromq-apps-interaction.git
 $ cd zeromq-apps-interaction/
@@ -51,6 +53,7 @@ $ make
 ```
 
 ## Запуск
+
 ### 1. Запустите сервер:
 
 ```
@@ -60,12 +63,12 @@ $ make run-server
 Консоль сервера будет ожидать ввод команды:
 
 ```
-Type send to start
+Type 'send' to send message, 'exit' to quit program
 > send
-Server started. Press Ctrl+C to stop
+Message sent: 16:38:53
 ```
 
-После ввода `send` сервер начнет отправлять сообщения с текущим временем раз в секунду.
+После ввода `send` сервер отправит сообщение с текущим временем.
 
 ### 2. Запустите клиент на другом терминале:
 
@@ -96,9 +99,15 @@ $ make clean
 ```
 $ make run-server
 ...
-Type send to start
+Type 'send' to send message, 'exit' to quit program
 > send
-Server started. Press Ctrl+C to stop
+Message sent: 16:38:53
+Type 'send' to send message, 'exit' to quit program
+> send
+Message sent: 16:39:19
+Type 'send' to send message, 'exit' to quit program
+> send
+Message sent: 16:39:30
 ```
 
 ### Терминал 2 (клиент)
@@ -113,9 +122,8 @@ Eshell V16.0.1 (press Ctrl+G to abort, type help(). for help)
 
 1> time_client:main().
 Connected successfully
-Time received: <<"01:01:35">>
-Time received: <<"01:01:36">>
-Time received: <<"01:01:37">>
-Time received: <<"01:01:38">>
+Time received: 16:38:53
+Time received: 16:39:19
+Time received: 16:39:30
 ...
 ```
